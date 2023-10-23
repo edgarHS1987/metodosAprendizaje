@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='estilos.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <script>
+    
+        
+        function resultados(){
+          var datos=[];
+
+          document.querySelector("#contieneChart").innerHTML = '<canvas id="myChart" width="300" height="393"></canvas>';
+
+          var grupoS = document.getElementsByName("grupoSelect");
+          var url = "datosGrafica?grupo=" + grupoS[0].value;
+          //var url = "datosGrafica?grupo=8a";
+          $.getJSON(url,function(data){
+            $.each(data,function(){
+              $.each(this,function(k,v){
+                datos.push(v.Kinestesico);
+                datos.push(v.Lector);                
+                datos.push(v.Auditivo);
+                datos.push(v.Visual);
+              });
+            });
+          }).done(function(){
+            var grupo = grupoS[0].value;
+            
+            var ctx = document.getElementById("myChart").getContext('2d');
+            
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ["Kinestésico","Lector/Escritor","Auditivo","Visual"],
+                    datasets: [{
+                        label: '# Alumnos',
+                        data: [datos[0],datos[1],datos[2],datos[3]],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(0, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)'
+
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(0, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                  legend: { display: false },
+                  title: {
+                    display: true,
+                    text: 'Tipos de Aprendizaje del Grupo ' + grupo
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  }
+                }
+            });
+
+          });
+        }
+
+        $(document).ready(function(){
+            resultados();
+        });
+          </script>
+
+        <style media="screen">
+          #contenedor{
+            width:500px;
+            height:500px;
+            text-align: center;
+            margin-left: 200px;
+          }
+        </style>
+
+</head>
+<body>
+    <div class="container-fluid text-center">
+
+        <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #e3f2fd;">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Estilos Aprendizaje</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Grupos
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="http://127.0.0.1:5000/alumnos">Ver Lista Alumnos</a></li>
+                      <li><a class="dropdown-item" href="http://127.0.0.1:5000/graficacion">Graficar</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+
+        <div class="row align-items-center">
+            
+            <div class="col-4">
+                <div>
+                    <select name="grupoSelect"  class="form-select" aria-label="Default select example" onchange="resultados()">
+                        <option selected>Selecciona el grupo..</option>
+                        {% for grupo in distinct_grupos %}
+
+                        
+                        <option value="{{ grupo.gradoGrupo }}">{{ grupo.gradoGrupo }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="" style="width:400px;  height:500px;" id="contieneChart">
+                    <canvas id="myChart" width="300" height="393"></canvas>
+                </div>
+            </div>
+            <div class="col-4">
+                
+            </div>
+        </div>
+    </div>
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+</body>
+</html>
