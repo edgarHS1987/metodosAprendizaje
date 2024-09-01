@@ -30,6 +30,7 @@ def metodosAprendizaje():
             session['user'] = usuario
             return redirect('/alumnos')
         
+        database.close()
         return render_template("login.html")
     
     if request.method == 'GET':
@@ -60,6 +61,8 @@ def graficacion():
 
         distinct_grupos = Alumno.select(Alumno.gradoGrupo).distinct()
 
+        database.close()
+
         return render_template("grafica.html",distinct_grupos=distinct_grupos)
 
 
@@ -83,7 +86,8 @@ def getAlumnos():
         grupo = request.args.get('grupo')
 
         query = (Alumno
-         .select(Alumno.gradoGrupo, Alumno.nombre, Alumno.apellido, Respuesta.resultado)
+         .select(Alumno.gradoGrupo, Alumno.nombre, Alumno.apellido, Respuesta.resultado, 
+                 Respuesta.porcentaje)
          .join(Respuesta, on=(Alumno.id == Respuesta.idAlumno))
          .where(Alumno.gradoGrupo == grupo))
         
@@ -95,7 +99,10 @@ def getAlumnos():
             diccionario_datos['Nombre'] = row.nombre
             diccionario_datos['Apellido'] = row.apellido
             diccionario_datos['Resultado'] = row.respuesta.resultado
+            diccionario_datos['Porcentaje'] = row.respuesta.porcentaje
             array_datos.append(diccionario_datos)
+
+        
 
         return jsonify({"data": array_datos})
 
@@ -215,13 +222,24 @@ def takeTest():
         
         results = query.execute()
         resultadoTest = ''
+        porcentajeResultado = 0.0
+        res = 0
         for row in results:
             resultadoTest = row.respuesta
             print(resultadoTest)
+            res = int(row.conteo)
+            porcentajeResultado = ( res*100 )/15
+        
+
+        #obtiene el total de mayor respuestas
+
         
         Respuesta.create(idAlumno=alumno_id,respuesta1=r1,respuesta2=r2,respuesta3=r3,respuesta4=r4,respuesta5=r5,
                          respuesta6=r6, respuesta7=r7, respuesta8=r8 , respuesta9=r9, respuesta10=r10, respuesta11=r11,
-                         respuesta12=r12, respuesta13=r13, respuesta14=r14, respuesta15=r15, respuesta16=r16, resultado=resultadoTest)
+                         respuesta12=r12, respuesta13=r13, respuesta14=r14, respuesta15=r15, respuesta16=r16, 
+                         resultado=resultadoTest, porcentaje=porcentajeResultado)
+
+
 
         return redirect('/endTest')
 

@@ -3,8 +3,11 @@ from decouple import config
 
 database = MySQLDatabase(
     'metodosaprendizaje',
-    user = 'root',
-    password = config('DBPASSWORD'),
+    #user = 'root',
+    #password = config('DBPASSWORD'),
+    #password = '',
+    user = 'edgar',
+    password = 'test',
     port=3306,
     host='localhost'
 )
@@ -37,6 +40,7 @@ class Respuesta(Model):
     respuesta15 = TextField()
     respuesta16 = TextField()
     resultado = TextField()
+    porcentaje = FloatField()
 
     class Meta:
         database = database

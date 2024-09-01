@@ -27,6 +27,7 @@
                         "<td>"+ v.Nombre +"</td>" +
                         "<td>"+v.Apellido+"</td>" +
                         "<td>"+v.Resultado+"</td>" +
+                        "<td>"+v.Porcentaje+"</td>" +
                         "</tr>";
               });
             });
@@ -58,8 +59,8 @@
                       Grupos
                     </a>
                     <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="http://127.0.0.1:5000/alumnos">Ver Lista Alumnos</a></li>
-                      <li><a class="dropdown-item" href="http://127.0.0.1:5000/graficacion">Graficar</a></li>
+                      <li><a class="dropdown-item" href="/alumnos">Ver Lista Alumnos</a></li>
+                      <li><a class="dropdown-item" href="/graficacion">Graficar</a></li>
                     </ul>
                   </li>
                 </ul>
@@ -91,6 +92,7 @@
                         <th scope="col">Nombre</th>
                         <th scope="col">Apellido</th>
                         <th scope="col">Estilo Aprendizaje</th>
+                        <th scope="col">Porcentaje</th>
                       </tr>
                     </thead>
                     <tbody name="cuerpoTabla">
