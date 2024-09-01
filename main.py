@@ -21,7 +21,7 @@ def metodosAprendizaje():
         pas = request.form['psw']
 
         # si el usuario es correcto, crear la sesion y permitir acceder al test
-        if usuario == 'alumno@gmail.com' and pas == 'usuari0':
+        if usuario == 'alumno1' and pas == 'usuari0':
             print('Se capturaron ambos datos y se logueara')
             session['user'] = usuario
             return redirect('/takeTest')
