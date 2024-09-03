@@ -233,7 +233,7 @@ def takeTest():
             resultadoTest = row.respuesta
             print(resultadoTest)
             res = int(row.conteo)
-            porcentajeResultado = ( res*100 )/15
+            porcentajeResultado = ( res*100 )/16
         
 
         #obtiene el total de mayor respuestas
