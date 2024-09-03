@@ -24,6 +24,7 @@
             $.each(data,function(){
               $.each(this,function(k,v){
                 tabla.innerHTML+="<tr>" +
+                        "<td>"+ v.numRegistro +"</td>" +
                         "<td>"+ v.Nombre +"</td>" +
                         "<td>"+v.Apellido+"</td>" +
                         "<td>"+v.Resultado+"</td>" +
@@ -70,7 +71,7 @@
 
         <div class="row align-items-center">
             
-            <div class="col-4">
+            <div class="col-2">
                 <div>
                     <select name="grupoSelect"  class="form-select" aria-label="Default select example" onchange="carga()">
                         <option selected>Selecciona el grupo..</option>
@@ -82,15 +83,16 @@
                     </select>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-9">
                 <br>
                 <div>
 
                   <table class="table table-sm table-hover">
                     <thead>
                       <tr>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Apellido</th>
+                        <th scope="col">#</th>
+                        <th scope="col" style="width: 250px;">Nombre</th>
+                        <th scope="col" style="width: 250px;">Apellido</th>
                         <th scope="col">Estilo Aprendizaje</th>
                         <th scope="col">Porcentaje</th>
                       </tr>
@@ -102,7 +104,7 @@
 
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-1">
                 
             </div>
         </div>

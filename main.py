@@ -89,13 +89,18 @@ def getAlumnos():
          .select(Alumno.gradoGrupo, Alumno.nombre, Alumno.apellido, Respuesta.resultado, 
                  Respuesta.porcentaje)
          .join(Respuesta, on=(Alumno.id == Respuesta.idAlumno))
-         .where(Alumno.gradoGrupo == grupo))
+         .where(Alumno.gradoGrupo == grupo)
+         .order_by( Alumno.apellido )
+         )
         
         #results = query.execute()
         array_datos=[]
+        counter = 0
         for row in query:
             print(query)
+            counter = counter + 1
             diccionario_datos={}
+            diccionario_datos['numRegistro'] = counter
             diccionario_datos['Nombre'] = row.nombre
             diccionario_datos['Apellido'] = row.apellido
             diccionario_datos['Resultado'] = row.respuesta.resultado
