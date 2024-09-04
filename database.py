@@ -3,11 +3,11 @@ from decouple import config
 
 database = MySQLDatabase(
     'metodosaprendizaje',
-    user = 'root',
+    #user = 'root',
     #password = config('DBPASSWORD'),
-    password = '',
-    #user = 'edgar',
-    #password = 'test',
+    #password = '',
+    user = 'edgar',
+    password = 'test',
     port=3306,
     host='localhost'
 )
