@@ -12,6 +12,18 @@ database = MySQLDatabase(
     host='localhost'
 )
 
+def reconnect_if_needed():
+    try:
+        database.connect()
+    except OperationalError as e:
+        if 'Lost connection' in str(e) or 'timeout' in str(e):
+            database.close()
+            database.connect()
+
+reconnect_if_needed()
+
+
+
 class Alumno(Model):
     nombre = TextField()
     apellido = TextField()
