@@ -59,6 +59,7 @@ def graficacion():
         if session.get('user') == None:
             return redirect('/metodosAprendizaje')
 
+        reconnect_if_needed()
         distinct_grupos = Alumno.select(Alumno.gradoGrupo).distinct()
 
         database.close()
@@ -73,7 +74,9 @@ def alumnos():
         if session.get('user') == None:
             return redirect('/metodosAprendizaje')
         
+        reconnect_if_needed()
         distinct_grupos = Alumno.select(Alumno.gradoGrupo).distinct()
+        database.close()
 
         return render_template("listaAlumnos.html",distinct_grupos=distinct_grupos)
 
@@ -84,6 +87,8 @@ def getAlumnos():
     if request.method == 'GET':
 
         grupo = request.args.get('grupo')
+
+        reconnect_if_needed()
 
         query = (Alumno
          .select(Alumno.gradoGrupo, Alumno.nombre, Alumno.apellido, Respuesta.resultado, 
@@ -107,7 +112,7 @@ def getAlumnos():
             diccionario_datos['Porcentaje'] = row.respuesta.porcentaje
             array_datos.append(diccionario_datos)
 
-        
+        database.close()
 
         return jsonify({"data": array_datos})
 
@@ -118,6 +123,8 @@ def getAlumnos():
 def datosGrafica():
     if request.method == 'GET':
         grupo = request.args.get('grupo')
+
+        reconnect_if_needed()
 
         #query = "select resultado,count(*) as numero from respuestas A inner join alumnos B on A.idAlumno = B.id Where gradogrupo='8a' and resultado='Auditivo'"
 
@@ -150,6 +157,8 @@ def datosGrafica():
         if len(array_datos) == 0:
             diccionario_datos['sindatos'] = 0
             array_datos.append(diccionario_datos)
+        
+        database.close()
 
         return jsonify({"data": array_datos})
         
@@ -159,11 +168,16 @@ def datosGrafica():
 #para hacer pruebas de funciones
 @app.route('/test',methods = ['GET','POST'])
 def test():
+
+    reconnect_if_needed()
+    
     query = (Respuesta.select().where(Respuesta.idAlumno == 1 ))
 
     for campo in query:
         print(campo.idAlumno)
         print(campo.respuesta1)
+
+    database.close()
 
     return render_template("login.html")
 
@@ -212,6 +226,8 @@ def takeTest():
         respuestasDic['res15'] = r15
         respuestasDic['res16'] = r16
 
+        reconnect_if_needed()
+
         alumno_id = Alumno.create(nombre=nombrealumno.upper(),apellido=apellido.upper(),gradoGrupo=grupo.upper())
 
         for r in respuestasDic:
@@ -254,7 +270,13 @@ def takeTest():
         else:
             return render_template("examen.html")
 
-    
+def reconnect_if_needed():
+    try:
+        database.connect()
+    except OperationalError as e:
+        if 'Lost connection' in str(e) or 'timeout' in str(e):
+            database.close()
+            database.connect()
 
 if __name__ == '__main__':
     app.run(debug=True)
