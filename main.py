@@ -1,7 +1,7 @@
 from flask import Flask,jsonify
 from flask import render_template
 from database import Alumno,Respuesta,Detalle
-from peewee import fn
+from peewee import *
 from flask import request,redirect
 from flask import session
 from database import database
@@ -170,7 +170,7 @@ def datosGrafica():
 def test():
 
     reconnect_if_needed()
-    
+
     query = (Respuesta.select().where(Respuesta.idAlumno == 1 ))
 
     for campo in query:
