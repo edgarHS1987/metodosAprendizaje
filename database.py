@@ -21,7 +21,7 @@ def get_database( escuela ):
             'metodoscolegio',
             #user = 'root',
             #password = config('DBPASSWORD'),
-            password = '',
+            #password = '',
             user = 'edgar',
             password = 'test',
             port=3306,
