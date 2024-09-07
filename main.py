@@ -1,15 +1,42 @@
 from flask import Flask,jsonify
 from flask import render_template
-from database import Alumno,Respuesta,Detalle
+from database import get_database,get_models
 from peewee import *
 from flask import request,redirect
 from flask import session
-from database import database
 from playhouse.shortcuts import model_to_dict
 
 app = Flask(__name__)
 app.secret_key = 'preguntillas'
 
+database = MySQLDatabase(
+            '',
+            user = '',
+            password = '',
+            port=3306,
+            host='localhost'
+        )
+
+Alumno = {}
+Respuesta = {}
+Detalle = {}
+
+@app.before_request
+def before_request():
+    global database 
+
+    if session.get('user') != None:
+        escuela = ''
+        if session['user'] == 'alumno1' or session['user'] == 'maestro@gmail.com':
+            escuela = 'secundaria'
+        
+        if session['user'] == 'colegiotest' or session['user'] == 'colegio@mail.com':
+            escuela = 'colegio'
+
+        database = get_database( escuela )
+        print( database )
+        global Alumno, Respuesta, Detalle
+        Alumno, Respuesta, Detalle = get_models( escuela )
 
 #login alumno
 @app.route('/metodosAprendizaje',methods=['GET','POST'])
@@ -21,11 +48,23 @@ def metodosAprendizaje():
         pas = request.form['psw']
 
         # si el usuario es correcto, crear la sesion y permitir acceder al test
+
+        #Secundaria Gabriel
         if usuario == 'alumno1' and pas == 'usuari0':
             print('Se capturaron ambos datos y se logueara')
             session['user'] = usuario
             return redirect('/takeTest')
         if usuario == 'maestro@gmail.com' and pas == 'maestro99':
+            print('Se capturaron ambos datos y se logueara un maestro')
+            session['user'] = usuario
+            return redirect('/alumnos')
+        
+        #colegio
+        if usuario == 'colegiotest' and pas == 'usuari0':
+            print('Se capturaron ambos datos y se logueara')
+            session['user'] = usuario
+            return redirect('/takeTest')
+        if usuario == 'colegio@mail.com' and pas == 'maestro99':
             print('Se capturaron ambos datos y se logueara un maestro')
             session['user'] = usuario
             return redirect('/alumnos')

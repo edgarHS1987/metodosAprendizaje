@@ -31,3 +31,5 @@ from main import app
 
 if __name__ == "__main__":
     app.run()
+
+server_name 146.190.222.125;
