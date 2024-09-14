@@ -33,3 +33,18 @@ if __name__ == "__main__":
     app.run()
 
 server_name 146.190.222.125;
+
+## Secundaria Jose Vasconselos
+Usuario Profesor = maestro@gmail.com
+Password = maestro99
+
+Alumno = alumno1
+Password = usuari0
+
+## Colegio Nuevo Humanismo
+Usuario Profesor = colegio@mail.com
+Password = maestro99
+
+Alumno = colegiotest
+Password = usuari0
+
